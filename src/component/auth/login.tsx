@@ -1,13 +1,26 @@
 "use client";
+
 import { Button, Col, Divider, Form, Input, Row } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import { useAuth } from "@/app/auth/auth-context";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
-  const onFinish = async (values: any) => {};
+  const { login } = useAuth();
+  const router = useRouter();
+
+  const onFinish = async (values: any) => {
+    const ok = await login(values.username, values.password);
+    if (ok) {
+      router.push("/dashboard");
+    } else {
+      alert("Sai tài khoản hoặc mật khẩu!");
+    }
+  };
 
   return (
-    <Row justify={"center"} style={{ marginTop: "30px" }}>
+    <Row justify="center" style={{ marginTop: "30px" }}>
       <Col xs={24} md={16} lg={8}>
         <fieldset
           style={{
@@ -18,6 +31,7 @@ const Login = () => {
           }}
         >
           <legend>Đăng Nhập</legend>
+
           <Form
             name="basic"
             onFinish={onFinish}
@@ -25,16 +39,16 @@ const Login = () => {
             layout="vertical"
           >
             <Form.Item
-              label="Email"
-              name="email"
+              label="Username"
+              name="username"
               rules={[
                 {
                   required: true,
-                  message: "Please input your email!",
+                  message: "Please input your username!",
                 },
               ]}
             >
-              <Input />
+              <Input placeholder="Enter your username" />
             </Form.Item>
 
             <Form.Item
@@ -47,18 +61,20 @@ const Login = () => {
                 },
               ]}
             >
-              <Input.Password />
+              <Input.Password placeholder="Enter your password" />
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" block>
                 Login
               </Button>
             </Form.Item>
           </Form>
-          <Link href={"/"}>
+
+          <Link href="/">
             <ArrowLeftOutlined /> Quay lại trang chủ
           </Link>
+
           <Divider />
         </fieldset>
       </Col>

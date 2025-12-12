@@ -1,53 +1,26 @@
-import React from "react";
+"use client";
 
+import { Dropdown, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import type { MenuProps } from "antd";
-import { Dropdown, Space } from "antd";
 
-const items: MenuProps["items"] = [
-  {
-    label: (
-      <a target="_blank" rel="noopener noreferrer" href="">
-        1st menu item
-      </a>
-    ),
-    key: "0",
-  },
-  {
-    label: (
-      <a target="_blank" rel="noopener noreferrer" href="">
-        2nd menu item
-      </a>
-    ),
-    key: "1",
-  },
-  {
-    label: (
-      <a target="_blank" rel="noopener noreferrer" href="">
-        3nd menu item
-      </a>
-    ),
-    key: "2",
-  },
-  {
-    type: "divider",
-  },
-  {
-    label: "3rd menu item（disabled）",
-    key: "3",
-    disabled: true,
-  },
-];
+const METHODS = ["TestGroup", "FormulaUnit", "MethodGroup"];
 
-const Filter = () => (
-  <Dropdown menu={{ items }}>
-    <a onClick={(e) => e.preventDefault()}>
-      <Space>
-        Please select
-        <DownOutlined />
-      </Space>
-    </a>
-  </Dropdown>
-);
+export default function Filter({
+  onSelect,
+}: {
+  onSelect: (m: string) => void;
+}) {
+  const items = METHODS.map((m) => ({
+    key: m,
+    label: m,
+    onClick: () => onSelect(m), // ⭐ quan trọng nhất
+  }));
 
-export default Filter;
+  return (
+    <Dropdown menu={{ items }}>
+      <Button>
+        Filter Method <DownOutlined />
+      </Button>
+    </Dropdown>
+  );
+}
